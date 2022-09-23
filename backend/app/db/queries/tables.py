@@ -53,6 +53,11 @@ class Tags(TypedTable):
 
     tag: str
 
+class Title(TypedTable):
+    __table__ = "title"
+
+    tag: str
+
 
 class ItemsToTags(TypedTable):
     __table__ = "items_to_tags"
@@ -60,6 +65,11 @@ class ItemsToTags(TypedTable):
     item_id: int
     tag: str
 
+class ItemsToTitles(TypedTable):
+    __table__ = "items_to_titles"
+
+    item_id: int
+    tag: str
 
 class Favorites(TypedTable):
     __table__ = "favorites"
@@ -71,5 +81,7 @@ class Favorites(TypedTable):
 users = Users()
 items = Items()
 tags = Tags()
+title = Title()
 items_to_tags = ItemsToTags()
+items_to_titles = ItemsToTitles()
 favorites = Favorites()

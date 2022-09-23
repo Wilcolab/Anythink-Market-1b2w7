@@ -9,8 +9,10 @@ from app.db.queries.tables import (
     Parameter,
     items,
     items_to_tags,
+    items_to_titles,
     favorites,
     tags as tags_table,
+    title as title_table,
     users,
 )
 from app.db.repositories.base import BaseRepository
@@ -104,6 +106,7 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
         self,
         *,
         tag: Optional[str] = None,
+        title: Optional[str] = None,
         seller: Optional[str] = None,
         favorited: Optional[str] = None,
         limit: int = 20,
@@ -156,6 +159,25 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
                 ),
             )
             # fmt: on
+        if title:
+            query_params.append(title)
+            query_params_count += 1
+
+            # fmt: off
+            query = query.join(
+                items_to_titles,
+            ).on(
+                (items.id == items_to_titles.item_id) & (
+                    items_to_titles.tag == Query.from_(
+                        title_table,
+                    ).where(
+                        title_table.tag == Parameter(query_params_count),
+                    ).select(
+                        title_table.tag,
+                    )
+                ),
+            )
+        
 
         if seller:
             query_params.append(seller)
